@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+     .container{
+      border:5px solid black;
+      padding:10px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.js">
+    </script>
+</head>
+<body>
+  <div id="red"></div>
+  <div id="green"></div>
+  <div id="blue"></div>
+  
+  <script>
+    
+    function reducer(state,action){
+      if(state===undefined){
+        return {color:'yellow'}//초기값 설정
+      }
+      let newState
+      if(action.type==='CHANGE_COLOR'){
+        newState=Object.assign({},state,{color:action.color})
+      }//복제를 해야 redux를 효율적으로 사용가능
+      return newState
+    }
+    
+    let store=Redux.createStore(reducer,//스토어 생성
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    ) //redux dev tools->시간여행
+    
+    //console.log(store.getState())
+    function red() {
+      var state=store.getState()//getState를 통해 state 가져옴,직접x
+      document.querySelector('#red').innerHTML = `
+      <div class='container' id='component_red' style='background-color:${state.color}'>
+        <h1>red</h1>
+        <input type='button' value='fire' onclick="
+          store.dispatch({type:'CHANGE_COLOR',color:'red'})
+        ">
+      </div>
+      `;//dispatch를 통해 action을 reducer에게 전달하면서 호출
+    }
+    store.subscribe(red) //state값이 바뀔때마다 인자안의 함수를 호출
+    red();
+    
+    function green() {
+      var state=store.getState()//getState를 통해 state 가져옴,직접x
+      document.querySelector('#green').innerHTML = `
+      <div class='container' id='component_green' style='background-color:${state.color}'>
+        <h1>green</h1>
+        <input type='button' value='fire' onclick="
+          store.dispatch({type:'CHANGE_COLOR',color:'green'})
+        ">
+      </div>
+      `;//dispatch를 통해 action을 reducer에게 전달하면서 호출
+    }
+    store.subscribe(green) //state값이 바뀔때마다 인자안의 함수를 호출
+    green();
+
+    function blue() {
+      var state=store.getState()//getState를 통해 state 가져옴,직접x
+      document.querySelector('#blue').innerHTML = `
+      <div class='container' id='component_blue' style='background-color:${state.color}'>
+        <h1>blue</h1>
+        <input type='button' value='fire' onclick="
+          store.dispatch({type:'CHANGE_COLOR',color:'blue'})
+        ">
+      </div>
+      `;//dispatch를 통해 action을 reducer에게 전달하면서 호출
+    }
+    store.subscribe(blue) //state값이 바뀔때마다 인자 안의 함수를 호출
+    blue();
+
+  </script>
+</body>
+</html>
